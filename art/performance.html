@@ -1,0 +1,68 @@
+<!doctype html>
+<!-- size 1600x680 -->
+<html><head><meta charset="utf-8"><title>Performance</title>
+<link rel="stylesheet" href="common.css">
+<style>
+body { width: 1600px; height: 680px; }
+.head { position: absolute; left: 72px; top: 48px; right: 72px; display: flex; justify-content: space-between; align-items: flex-end; }
+h1 { font-size: 40px; margin-top: 8px; }
+.legend { display: flex; gap: 22px; font-size: 15px; color: var(--text-secondary); }
+.legend i { display: inline-block; width: 14px; height: 14px; border-radius: 4px; margin-right: 8px; vertical-align: -2px; }
+.grid { position: absolute; left: 72px; top: 156px; width: 1456px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.panel { padding: 20px 24px 18px; }
+.panel h3 { font-size: 17px; font-weight: 600; }
+.panel .note { font-size: 13px; color: var(--text-muted); margin: 3px 0 14px; height: 18px; }
+.row { display: grid; grid-template-columns: 58px 1fr; align-items: center; gap: 10px; margin: 8px 0; font-size: 13px; color: var(--text-secondary); }
+.track { position: relative; height: 26px; }
+.bar { position: absolute; left: 0; top: 0; height: 26px; border-radius: 0 4px 4px 0; }
+.val { position: absolute; top: 3px; font-size: 15px; font-weight: 600; color: var(--text-primary); white-space: nowrap; }
+.live { position: absolute; left: 72px; top: 380px; width: 1456px; }
+.live h2 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+.live .note { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; }
+.tiles { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+.stat { padding: 18px 22px; }
+.stat .k { font-size: 13px; color: var(--text-secondary); }
+.stat .v { font-size: 40px; font-weight: 700; letter-spacing: -.02em; margin-top: 4px; }
+.stat .v small { font-size: 18px; font-weight: 500; color: var(--text-secondary); margin-left: 4px; }
+.foot { position: absolute; left: 72px; bottom: 26px; font-size: 13px; color: var(--text-muted); width: 1100px; line-height: 1.5; }
+</style></head>
+<body>
+<div class="head">
+  <div><div class="kicker">Measured on the TV &middot; 27&ndash;28 Oct 2026</div><h1>Performance, before and after</h1></div>
+  <div class="legend"><span><i style="background:var(--before)"></i>Before (27 Oct, Samsung bloat running)</span><span><i style="background:var(--after)"></i>After (debloated)</span></div>
+</div>
+<div class="grid" id="grid"></div>
+
+<div class="live">
+  <h2>Right now, on the finished setup</h2>
+  <div class="note">30-second samples: CPU from /proc/stat (4 cores), GPU from the Mali driver's busy counter, memory from /proc/meminfo (of 1.8 GB). Home key: average of 3 runs from YouTube, until the page drew its first frame.</div>
+  <div class="tiles">
+    <div class="tile stat"><div class="k">Home key &rarr; home screen</div><div class="v">0.45<small>s</small></div></div>
+    <div class="tile stat"><div class="k">CPU on the home screen</div><div class="v">10<small>%</small></div></div>
+    <div class="tile stat"><div class="k">GPU on the home screen</div><div class="v">0<small>%</small></div></div>
+    <div class="tile stat"><div class="k">CPU while YouTube plays</div><div class="v">23<small>%</small></div></div>
+    <div class="tile stat"><div class="k">GPU while YouTube plays</div><div class="v">1<small>%</small></div></div>
+    <div class="tile stat"><div class="k">Free memory</div><div class="v">760<small>MB</small></div></div>
+  </div>
+</div>
+<div class="foot">Video is decoded by a dedicated chip, so the GPU stays almost idle. Load average is left out on purpose: about 8 TV driver threads wait permanently and keep it near 14 whatever the TV does. Before/after pairs were measured on the same day; free memory at different uptimes. Crash-loop cause: voice, SmartThings and MDE apps relaunching (37, 12 and 6 launches).</div>
+<div class="signature"><svg viewBox="0 0 24 24"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z" fill="#d97757"/></svg>Made by <b>Claude Opus 5.5</b></div>
+<script>
+var P = [
+  {t:"Crash-looping Samsung apps", n:"app launches per minute (55 every 40 s), lower is better", b:82, a:0, u:""},
+  {t:"CPU pressure", n:"% of time tasks wait for a CPU, lower is better", b:6, a:3, u:" %"},
+  {t:"Free memory", n:"MB, higher is better", b:460, a:780, u:" MB"}
+];
+var g = document.getElementById('grid');
+P.forEach(function(p){
+  var max = Math.max(p.b, p.a), W = 300;
+  function row(lbl, v, col, txt){
+    var w = v > 0 ? Math.max(4, W * v / max) : 2;
+    return '<div class="row"><span>'+lbl+'</span><div class="track"><div class="bar" style="width:'+w+'px;background:'+col+'"></div>'+
+      '<span class="val" style="left:'+(w+10)+'px">'+txt+'</span></div></div>';
+  }
+  g.insertAdjacentHTML('beforeend', '<div class="tile panel"><h3>'+p.t+'</h3><div class="note">'+p.n+'</div>'+
+    row('Before', p.b, 'var(--before)', p.bl || (p.b + p.u)) + row('After', p.a, 'var(--after)', p.al || (p.a + p.u)) + '</div>');
+});
+</script>
+</body></html>

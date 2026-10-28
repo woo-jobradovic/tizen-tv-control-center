@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://example.com/TVControlCenter" version="1.0.0" viewmodes="maximized">
+  <tizen:application id="ClaudeTVCC0.ControlCenter" package="ClaudeTVCC0" required_version="6.0"/>
+  <content src="index.html"/>
+  <feature name="http://tizen.org/feature/screen.size.normal.1080.1920"/>
+  <icon src="icon.png"/>
+  <name>Control Center</name>
+  <access origin="*" subdomains="true"/>
+  <tizen:profile name="tv-samsung"/>
+  <tizen:metadata key="http://samsung.com/tv/metadata/use.focus" value="false"/>
+  <tizen:metadata key="http://samsung.com/tv/metadata/transparent.support" value="true"/>
+  <tizen:metadata key="http://samsung.com/tv/metadata/multitasking.support" value="false"/>
+  <tizen:metadata key="no_show_delay" value="true"/>
+  <tizen:setting nodisplay="false" screen-orientation="landscape" context-menu="enable" background-support="enable" encryption="disable" install-location="auto" hwkey-event="enable"/>
+  <tizen:privilege name="http://tizen.org/privilege/application.launch"/>
+  <tizen:privilege name="http://tizen.org/privilege/application.info"/>
+  <tizen:privilege name="http://tizen.org/privilege/filesystem.read"/>
+  <tizen:privilege name="http://tizen.org/privilege/filesystem.write"/>
+  <tizen:privilege name="http://tizen.org/privilege/internet"/>
+  <tizen:privilege name="http://tizen.org/privilege/tv.inputdevice"/>
+  <tizen:privilege name="http://tizen.org/privilege/volume.set"/>
+  <tizen:privilege name="http://tizen.org/privilege/notification"/>
+</widget>

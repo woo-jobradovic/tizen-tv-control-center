@@ -1,0 +1,53 @@
+<!doctype html>
+<!-- size 1280x640 -->
+<html><head><meta charset="utf-8"><title>Hero</title>
+<link rel="stylesheet" href="common.css">
+<style>
+body { width: 1280px; height: 640px; }
+.left { position: absolute; left: 64px; top: 64px; width: 480px; }
+h1 { font-size: 50px; margin: 14px 0 14px; }
+.sub { font-size: 18px; margin-bottom: 26px; }
+ul { list-style: none; }
+li { display: flex; gap: 12px; align-items: flex-start; font-size: 17px; line-height: 1.3; margin-bottom: 13px; color: var(--text-primary); }
+li svg { flex: 0 0 22px; width: 22px; height: 22px; margin-top: 0; }
+li span em { font-style: normal; color: var(--text-secondary); }
+.tv { position: absolute; left: 566px; top: 92px; width: 668px; }
+.screen {
+  width: 668px; height: 376px; border-radius: 10px; overflow: hidden;
+  border: 7px solid #050505; background: #000;
+  box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px #2c2c2a;
+}
+.screen img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.stand { width: 210px; height: 6px; margin: 0 auto; background: linear-gradient(#2a2a28, #121211); border-radius: 0 0 6px 6px; }
+.toast {
+  position: absolute; right: -26px; top: -30px; width: 300px;
+  display: flex; gap: 12px; align-items: center; padding: 14px 16px; border-radius: 18px;
+  background: #1c1c1b; border: 1px solid #3a3a37; box-shadow: 0 16px 40px rgba(0,0,0,.6);
+}
+.toast img { width: 44px; height: 44px; }
+.toast b { display: block; font-size: 15px; font-weight: 600; }
+.toast span { font-size: 13px; color: var(--text-secondary); }
+.caption { text-align: center; margin-top: 20px; font-size: 14px; color: var(--text-muted); }
+</style></head>
+<body>
+<div class="left">
+  <div class="kicker">Samsung S90D OLED &middot; Tizen 9</div>
+  <h1>A clean home for your Samsung TV</h1>
+  <p class="sub">Samsung's ad-filled home screen replaced with a fast, minimal Control Center. Bloat is switched off for real, and nothing you use is lost.</p>
+  <ul>
+    <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#0ca30c" opacity=".18"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#3fcf3f" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Home screen with no ads and no tracking tiles</span></li>
+    <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#0ca30c" opacity=".18"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#3fcf3f" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>41 apps truly disabled <em>(not hidden)</em>, 33 services blocked</span></li>
+    <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#0ca30c" opacity=".18"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#3fcf3f" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Background crash loops: 55 every 40 s &rarr; 0</span></li>
+    <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#0ca30c" opacity=".18"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#3fcf3f" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Your own pop-ups over any app <em>(Netflix, YouTube&hellip;)</em></span></li>
+    <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#0ca30c" opacity=".18"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#3fcf3f" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Picture Clarity &amp; Picture Mode keep working</span></li>
+    <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#0ca30c" opacity=".18"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#3fcf3f" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Everything survives a reboot</span></li>
+  </ul>
+</div>
+<div class="tv">
+  <div class="screen"><img src="cc-tv.jpg" alt=""></div>
+  <div class="stand"></div>
+  <div class="toast"><img src="icon-washer.png" alt=""><div><b>Your laundry is done</b><span>The washing machine has finished</span></div></div>
+  <div class="caption">The real screen, captured on the TV</div>
+</div>
+<div class="signature"><svg viewBox="0 0 24 24"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z" fill="#d97757"/></svg>Made by <b>Claude Opus 5.5</b></div>
+</body></html>

@@ -1,0 +1,43 @@
+/* Shared look for the README images (rendered to PNG with render.sh). Dark, TV-like. */
+:root {
+  --surface-0: #0f0f0e;
+  --surface-1: #1a1a19;
+  --surface-2: #242423;
+  --line: #383835;
+  --text-primary: #f0efec;
+  --text-secondary: #c3c2b7;
+  --text-muted: #8f8e86;
+  --before: #d95926;
+  --after: #3987e5;
+  --good: #0ca30c;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; }
+body {
+  background: radial-gradient(ellipse at 70% 30%, #23221f 0%, var(--surface-0) 65%);
+  color: var(--text-primary);
+  font-family: "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  position: relative;
+}
+.kicker { font-size: 15px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; }
+h1 { font-weight: 700; letter-spacing: -.02em; line-height: 1.05; }
+.sub { color: var(--text-secondary); line-height: 1.45; }
+.signature {
+  position: absolute; right: 28px; bottom: 22px;
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 14px 7px 10px; border-radius: 999px;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.10);
+  font-size: 13px; color: var(--text-secondary); letter-spacing: .02em;
+}
+.signature b { color: var(--text-primary); font-weight: 600; }
+.signature svg { width: 16px; height: 16px; }
+.tile {
+  background: var(--surface-1); border: 1px solid var(--line); border-radius: 18px;
+}
+.chip {
+  display: inline-block; padding: 5px 11px; border-radius: 999px; margin: 0 6px 7px 0;
+  background: var(--surface-2); border: 1px solid var(--line);
+  font-size: 13px; color: var(--text-secondary); font-family: "Cascadia Mono", Consolas, monospace;
+}

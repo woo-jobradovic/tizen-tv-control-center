@@ -1,0 +1,76 @@
+<!doctype html>
+<!-- size 1600x1250 -->
+<html><head><meta charset="utf-8"><title>Debloat</title>
+<link rel="stylesheet" href="common.css">
+<style>
+body { width: 1600px; height: 1250px; }
+.head { position: absolute; left: 72px; top: 48px; width: 1456px; display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; }
+h1 { font-size: 40px; margin-top: 8px; }
+.head .sub { font-size: 16px; width: 640px; }
+.stats { position: absolute; left: 72px; top: 178px; width: 1456px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.stat { padding: 18px 24px; display: flex; align-items: center; gap: 18px; }
+.stat .v { font-size: 48px; font-weight: 700; letter-spacing: -.02em; }
+.stat .k { font-size: 15px; color: var(--text-secondary); line-height: 1.35; }
+.stat .k b { color: var(--text-primary); font-weight: 600; display: block; font-size: 17px; }
+.cols { position: absolute; left: 72px; top: 318px; width: 1456px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.col { padding: 22px 24px 14px; }
+.col h2 { font-size: 19px; font-weight: 600; margin-bottom: 2px; }
+.col .how { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; font-family: "Cascadia Mono", Consolas, monospace; }
+.grp { margin-bottom: 10px; }
+.grp h4 { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; letter-spacing: .02em; }
+.grp h4 span { color: var(--text-muted); font-weight: 400; }
+.chip { font-size: 12px; padding: 4px 9px; margin: 0 5px 6px 0; }
+.chip.off { text-decoration: line-through; text-decoration-color: rgba(217,89,38,.8); }
+.keep { position: absolute; left: 72px; top: 1064px; width: 1456px; padding: 18px 24px; }
+.keep h2 { font-size: 17px; font-weight: 600; margin-bottom: 10px; }
+.keep .chip { border-color: rgba(12,163,12,.45); color: #cfe9cf; font-family: inherit; font-size: 13px; }
+</style></head>
+<body>
+<div class="head">
+  <div><div class="kicker">Debloat</div><h1>Truly disabled, not hidden</h1></div>
+  <p class="sub">Hiding an app only removes its tile; it keeps running, phoning home and relaunching. Here the package manager marks each app <b>disabled</b>: it can't start, can't run in the background and can't be relaunched. It survives reboots, and one command undoes it.</p>
+</div>
+<div class="stats">
+  <div class="tile stat"><div class="v" style="color:var(--before)">41</div><div class="k"><b>Samsung apps disabled</b>voice, ads, game, health, IoT, ambient&hellip;</div></div>
+  <div class="tile stat"><div class="v" style="color:var(--before)">33</div><div class="k"><b>system services blocked at boot</b>tracking, telemetry, auto-update, pop-ups</div></div>
+  <div class="tile stat"><div class="v" style="color:var(--before)">15</div><div class="k"><b>restart loops stopped</b>services that relaunched a blocked program every few seconds</div></div>
+</div>
+<div class="cols">
+  <div class="tile col" id="apps"><h2>41 apps disabled</h2><div class="how">pkgcmd -D -t app -n &lt;appid&gt;  &middot;  undo: pkgcmd -A</div></div>
+  <div class="tile col" id="svcs"><h2>33 services blocked</h2><div class="how">mount --bind /bin/true &lt;binary&gt; at every boot  &middot;  undo: reboot without it</div></div>
+</div>
+<div class="tile keep"><h2>Kept on purpose</h2><div id="keep"></div></div>
+<div class="signature"><svg viewBox="0 0 24 24"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z" fill="#d97757"/></svg>Made by <b>Claude Opus 5.5</b></div>
+<script>
+var APPS = [
+  ['Voice & AI assistants', 'voice-app voice-app-service multi-assistant-service AICompanionAgent AICompanionUI AICompanionUINotice'],
+  ['SmartThings & IoT', 'smartthings-thing mcf-agent tvsensor-iot-service mde-framework MultiControl-Service multiscreen easysetup-daemon tap-service-agent tap-service-agent-ui'],
+  ['Ads & content feeds', 'coba.adagent content-tiles-provider contentservicemanager waapp-contents-provider preview-updater aov-dashboard'],
+  ['Health & Life', 'health-mde-service health-mde-service-view health-mde-setting health-mde-workout-tracker coba.healthview lifeplus'],
+  ['Ambient & Art', 'ambient-sound ambientbg-journey ambientfte ambientinfo-resources home.art art-app'],
+  ['Gaming', 'gaminghub gamehome gamepadguide home.game'],
+  ['TV Plus, HbbTV & home tabs', 'tvplusstandalone tvplus hbbtv home.media']
+];
+var SVCS = [
+  ['Viewing analysis (ACR)', 'contents-recognition-service'],
+  ['Telemetry & logs', 'data-service sp-kpi devicetracker stability-monitor SCSAgent emergencyLogTransmitter abnormal_user_behavior'],
+  ['Firmware auto-update', 'SWUAutoUpgrade SWUService SWUCoreTV SWUVerifierTV fw-update-service fw-update-init-download'],
+  ['Ad ID, push & nag pop-ups', 'TIFADaemon_L TIFSDaemon pushd nagsam-daemon'],
+  ['Monitoring & presence', 'ambient-ua-agent bt-monitor wifi-monitor user-presence wifi_state_manager'],
+  ['Device registration', 'register-device registerav registertv welcome-mode'],
+  ['Other', 'p2p-asm p2p-asm-UI gamebar-service bleapp cis-api-service-app screen_sharing']
+];
+var KEEP = ['Settings & quick menu','DRM for Netflix / HBO','AirPlay & Chromecast casting','Bluetooth remote','AI picture & sound','Screensaver (OLED care)','Web runtime (runs the Control Center)','Volume & input switching','App Store'];
+function fill(id, groups){
+  var el = document.getElementById(id), total = 0;
+  groups.forEach(function(g){
+    var items = g[1].split(' '); total += items.length;
+    el.insertAdjacentHTML('beforeend', '<div class="grp"><h4>'+g[0]+' <span>'+items.length+'</span></h4>'+
+      items.map(function(n){ return '<span class="chip off">'+n+'</span>'; }).join('')+'</div>');
+  });
+  return total;
+}
+console.log('apps', fill('apps', APPS), 'svcs', fill('svcs', SVCS));
+document.getElementById('keep').innerHTML = KEEP.map(function(k){ return '<span class="chip">&#10003; '+k+'</span>'; }).join('');
+</script>
+</body></html>

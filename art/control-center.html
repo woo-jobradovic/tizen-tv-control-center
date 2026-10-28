@@ -1,0 +1,26 @@
+<!doctype html>
+<!-- size 1600x1000 -->
+<html><head><meta charset="utf-8"><title>Control Center</title>
+<link rel="stylesheet" href="common.css">
+<style>
+body { width: 1600px; height: 1000px; }
+.head { position: absolute; left: 80px; top: 52px; right: 80px; display: flex; justify-content: space-between; align-items: flex-end; }
+h1 { font-size: 40px; margin-top: 8px; }
+.facts { display: flex; gap: 28px; font-size: 16px; color: var(--text-secondary); }
+.facts b { color: var(--text-primary); font-weight: 600; }
+.screen {
+  position: absolute; left: 112px; top: 150px; width: 1376px; height: 774px;
+  border-radius: 14px; overflow: hidden; border: 8px solid #050505;
+  box-shadow: 0 30px 90px rgba(0,0,0,.6), 0 0 0 1px #2c2c2a;
+}
+.screen img { width: 100%; height: 100%; display: block; }
+.signature { bottom: 4px; }
+</style></head>
+<body>
+<div class="head">
+  <div><div class="kicker">The new home screen</div><h1>Control Center</h1></div>
+  <div class="facts"><span><b>1 page</b> of HTML + 4 tiny daemons</span><span><b>Home</b> &amp; <b>Back</b> keys return here</span><span><b>No</b> ads, tiles or rows of suggestions</span></div>
+</div>
+<div class="screen"><img src="cc-tv.jpg" alt=""></div>
+<div class="signature"><svg viewBox="0 0 24 24"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z" fill="#d97757"/></svg>Made by <b>Claude Opus 5.5</b></div>
+</body></html>
