@@ -61,7 +61,7 @@ We don't claim the TV is "x times faster". We measured what we could measure, an
 3. [Debloat](docs/03-debloat.md): **disable** apps instead of hiding them, block services, avoid restart loops
 4. [Control Center](docs/04-control-center.md): a web app as the home screen, launching apps, remote keys
 5. [Notifications over any app](docs/05-notifications.md): native Samsung pop-ups without libnotification
-6. [Picture settings greyed out](docs/06-picture-clarity.md): the usual causes, and the one that hits custom home screens
+6. [Picture settings greyed out](docs/06-picture-clarity.md): the usual causes, and the one that hits custom home screens ([short fix for any launcher](docs/picture-fix-any-launcher.md))
 7. [Performance](docs/07-performance.md): what was measured, and how to measure your own TV
 8. [Lessons and dead ends](docs/08-lessons.md): what didn't work, and mistakes worth avoiding
 9. [Recovery](docs/09-recovery.md): undo any part, or all of it
@@ -106,6 +106,10 @@ factor.
 **My Picture Clarity is greyed out, and I haven't rooted anything.** It's usually the input type (an HDMI
 source set as **PC**), **Game Mode** or **Input Signal Plus**. See
 [chapter 6](docs/06-picture-clarity.md).
+
+**Picture modes greyed out since I installed another launcher (Arn0-Launcher or similar).** Same bug we
+hit: a flag Samsung Home leaves set. One D-Bus call fixes it, with any launcher:
+[the standalone fix](docs/picture-fix-any-launcher.md).
 
 **Does blocking updates make the TV less safe?** Yes, you stop getting Samsung's security fixes. The
 setup blocks auto-update because an update can remove root and parts of the system it relies on. It's a

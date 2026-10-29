@@ -57,6 +57,22 @@ Dock app IDs on our TV (they vary by region):
 | App Store | `org.volt.apps` |
 | Settings | `org.tizen.menu` |
 
+### Optional: Live TV and HDMI inputs
+
+Our TV has no antenna or cable, so these aren't in our dock. Samsung's own TV and input apps stay
+installed (the debloat doesn't touch them), so you can add them:
+
+* **Live TV:** a tile with `data-app="org.tizen.tv-viewer"` opens Samsung's TV viewer on the last TV
+  source. Tested on our S90D: it opens and becomes the app on screen.
+* **A specific HDMI input:** not solved yet. `tv-viewer` has a `change_source` app-control key, but
+  `app_launcher -s org.tizen.tv-viewer change_source <value>` with `HDMI1`, `SOURCE_TYPE_HDMI1` and
+  `TV_SOURCE_HDMI1` didn't switch the source on our TV. Nothing was plugged in, so an empty port may
+  simply be refused. The current source can be read with `vconftool get memory/eden/source/current_source`.
+  If you find a value that works, please open an issue.
+
+The launcher passes the whole line from `cc_launch` to `app_launcher -s`, so a tile can carry app-control
+extras: `data-app="org.tizen.tv-viewer change_source <value>"`.
+
 `cc-launcher.awk` also does three other jobs: it resets the AV-output "new home" flag every ~30 s
 ([chapter 6](06-picture-clarity.md)); it launches the CC once 20 s after boot if the system tried
 before the SMACK rules were loaded; and it rotates its logs.
