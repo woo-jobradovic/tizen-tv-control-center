@@ -52,6 +52,9 @@ and Samsung TV Plus. A list built from your own TV's traffic is shorter and safe
    and every streaming app you use.
 4. Check that the apps you use still start, then watch the log again for a day.
 
+Our own list, with what each host is and whether we tested blocking it, is in [`blocklist/`](../blocklist/).
+Use it as a starting point next to your own log ([No root](11-no-root.md#3-block-at-the-dns)).
+
 What *not* to do: signing the TV out of the Samsung account didn't stop the device-registration
 traffic, and it put a sign-in wall in front of every app. We signed back in. DNS blocking doesn't
 depend on the account state.

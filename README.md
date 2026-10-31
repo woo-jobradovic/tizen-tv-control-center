@@ -29,14 +29,18 @@ runs on the TV.
 2. **Settings → General & Privacy → Start Screen Option** (or *Smart Features*): turn off **Start with
    Smart Hub Home**, **Autorun Smart Hub**, **Autorun Last App** and **Autorun Samsung TV Plus**. This
    stops TV Plus from starting by itself.
-3. **Block at your router, not with a giant list.** Point the TV at a filtering DNS (AdGuard DNS,
-   NextDNS, Pi-hole), watch its DNS log for a day, and block what it actually contacts. Big public
-   Samsung lists are known to break the app store and TV Plus ([chapter 1](docs/01-privacy-research.md)).
-   Also block the TV's hard-coded fallback to 8.8.8.8.
+3. **Block at the DNS, not with a giant list.** Quickest: set the TV's DNS to AdGuard DNS
+   (`94.140.14.14`). Fuller: a filtering DNS (AdGuard Home, Pi-hole, NextDNS) with
+   [our short list](blocklist/), built from a real TV's traffic. It leaves the app store, account and
+   TV Plus alone. Also block the TV's hard-coded fallback to 8.8.8.8.
 4. **Ad-free YouTube:** [TizenBrew](https://github.com/reisxd/TizenBrew) with the TizenTube module
    (Developer Mode, no root).
 5. **Updates:** turn off **Auto Update** and choose **Do not update** in the pop-up, if you prefer to
    keep the firmware you have. Weigh this against missing security fixes.
+
+**Older TV, or menus that don't match?** The [no-root guide](docs/11-no-root.md) covers every model
+from 2016 (Tizen 2.4) on: where the switches are per year, step-by-step DNS setup, the blocklist and how
+to undo everything.
 
 ## What you get with root
 
@@ -66,6 +70,7 @@ We don't claim the TV is "x times faster". We measured what we could measure, an
 8. [Lessons and dead ends](docs/08-lessons.md): what didn't work, and mistakes worth avoiding
 9. [Recovery](docs/09-recovery.md): undo any part, or all of it
 10. [Compatibility](docs/10-compatibility.md): check your model before changing anything, and report results
+11. [No root](docs/11-no-root.md): what any Samsung TV owner can do, from 2016 models on, with our DNS blocklist
 11. [Timeline](docs/timeline.md): from the first DNS log to the finished setup
 
 ![Performance](screenshots/performance.png)
@@ -140,7 +145,9 @@ tv/opt-etc/          everything that runs on the TV from /opt/etc
   cc-disabled-apps.txt the 41 disabled app IDs
   smack-cc.rules       SMACK rules for the CC app label
 tv/register/         package database rows that register the CC app
-tools/               PC helpers: tvcmd.sh, push.sh / pull.sh, inventory.sh (read-only model check)
+tools/               PC helpers: tvcmd.sh, push.sh / pull.sh, inventory.sh (read-only model check),
+                     blocklist.sh (builds the DNS lists)
+blocklist/           DNS blocklist for any Samsung TV: the hostname table and ready-made files
 art/                 HTML sources of the images in screenshots/
 AGENTS.md            rules for AI agents working on a TV
 ```

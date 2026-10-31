@@ -1,0 +1,8 @@
+# Samsung TV: hostnames to never block (Smart Hub, app store, account, time)
+# Built from one TV's router log. Watch your own DNS log too.
+# https://github.com/woo-jobradovic/tizen-tv-control-center
+#
+samsungqbe.com
+cdn.samsungcloudsolution.com
+api.samsungcloud.com
+time.samsungcloudsolution.com

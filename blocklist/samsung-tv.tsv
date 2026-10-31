@@ -1,0 +1,49 @@
+# Hostnames a Samsung TV contacts, from our S90D's router log (Sept 2026: about 80 distinct hostnames in 5 hours;
+# the ad, tracking, analytics and ACR ones are listed here, plus the ones the TV needs).
+# Source for tools/blocklist.sh, which turns this file into lists for AdGuard, Pi-hole, hosts files and NextDNS.
+#
+# Columns (tab-separated): group  host  tested  what it is
+#   group   ads, telemetry, acr      blocked by default
+#           voice, smartthings, tvplus, hdmi-id, apps   optional: each one turns a feature off
+#           keep                     never block: the TV breaks without it (written out as an allowlist)
+#   tested  yes    blocked on our TV, and the app store, account and streaming apps kept working
+#           seen   our TV contacted it, not yet tested blocked on its own
+#           known  documented by others (ACR endpoints: our TV never contacted them with Viewing Information Services off)
+#   For keep rows, yes means our TV uses it all the time; "breaks without it" comes from our tests and others' reports.
+#
+# Untested in the default groups: img-resize-cdn-prod.samsungnyc.com and lcprd1.samsungcloudsolution.net (tested=seen).
+# One TV (an EU S90D). Your TV may use other hosts: watch your own DNS log (docs/11-no-root.md).
+
+ads	ads.samsungads.com	yes	Samsung Ads platform
+ads	tvx.adgrx.com	yes	AdGear, Samsung's ad serving
+ads	cdn-stv.adgrx.com	yes	AdGear, Samsung's ad serving
+ads	catalyst.adgrx.com	yes	AdGear, Samsung's ad serving
+ads	img-resize-cdn-prod.samsungnyc.com	seen	image CDN for Samsung Ads (home-screen banners)
+telemetry	dc.di.atlas.samsung.com	yes	device intelligence / usage analytics
+telemetry	lcprd1.samsungcloudsolution.net	seen	log collector
+acr	log-ingestion.samsungacr.com	known	ACR (content recognition) upload
+acr	log-ingestion-eu.samsungacr.com	known	ACR upload, EU
+acr	log-config.samsungacr.com	known	ACR configuration
+acr	acr0.samsungcloudsolution.com	known	ACR endpoint. AdGuard's default list misses it
+acr	acr-eu-prd.samsungcloud.tv	known	ACR endpoint, EU
+acr	acr-us-prd.samsungcloud.tv	known	ACR endpoint, US
+voice	prd-use2-bhp-api.aibixby.com	seen	Bixby backend, contacted with nobody speaking. Blocking turns voice control off
+voice	prd-euw1-ucs.aibixby.com	seen	Bixby backend. Blocking turns voice control off
+smartthings	api.smartthings.com	seen	SmartThings cloud. Blocking breaks the SmartThings phone app for the TV
+smartthings	client.smartthings.com	seen	SmartThings cloud
+smartthings	spigot-regional.smartthings.com	seen	SmartThings cloud
+tvplus	tvpnlinupepgpus.samsungcloud.tv	seen	Samsung TV Plus channel guide (US). Not ACR. Blocking breaks TV Plus
+hdmi-id	www.ueiwsp.com	seen	device identification for HDMI inputs and the universal remote (UEI)
+apps	googleads.g.doubleclick.net	yes	Google ads inside apps
+apps	static.doubleclick.net	yes	Google ads inside apps
+apps	nrdp.logs.netflix.com	yes	Netflix app logging
+apps	logs.netflix.com	yes	Netflix app logging
+apps	unagi-na.amazon.com	seen	Prime Video analytics
+apps	beacons-wbd.mediamelon.com	seen	HBO Max playback analytics
+apps	register.mediamelon.com	seen	HBO Max playback analytics
+apps	litix.io	seen	Mux video analytics (several apps)
+apps	eligibility-panelresearch.googlevideo.com	seen	YouTube audience panel research
+keep	samsungqbe.com	yes	Smart Hub and the app store (osb-v2 and others)
+keep	cdn.samsungcloudsolution.com	yes	firmware information and notices
+keep	api.samsungcloud.com	yes	Samsung account. On Tizen, apps need the signed-in account
+keep	time.samsungcloudsolution.com	known	time sync. Blocking it is reported to break Plex, YouTube and Prime Video

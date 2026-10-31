@@ -1,0 +1,17 @@
+# Samsung TV: ads, telemetry and ACR blocklist. Groups: ads,telemetry,acr
+# Built from one TV's router log. Watch your own DNS log too.
+# https://github.com/woo-jobradovic/tizen-tv-control-center
+#
+ads.samsungads.com
+tvx.adgrx.com
+cdn-stv.adgrx.com
+catalyst.adgrx.com
+img-resize-cdn-prod.samsungnyc.com
+dc.di.atlas.samsung.com
+lcprd1.samsungcloudsolution.net
+log-ingestion.samsungacr.com
+log-ingestion-eu.samsungacr.com
+log-config.samsungacr.com
+acr0.samsungcloudsolution.com
+acr-eu-prd.samsungcloud.tv
+acr-us-prd.samsungcloud.tv

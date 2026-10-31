@@ -23,4 +23,15 @@ labels: compatibility
 
 **Anything that broke** (and how you recovered):
 
+---
+
+**No root** ([docs/11-no-root.md](../../docs/11-no-root.md)). Fill in only this part if you didn't root:
+
+**Model year:**
+**Where you found the privacy switches** (e.g. Settings → Support → Terms & Policy):
+**Where you found Autorun Smart Hub:**
+**Where you found the DNS setting:**
+**Blocklist:** which file or groups you used, and which apps still worked:
+**Hostnames your TV contacts that aren't on our list** (from your DNS log):
+
 <!-- Please leave out your serial number, MAC/IP addresses, account details and router info. -->
