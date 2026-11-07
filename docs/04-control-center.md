@@ -80,13 +80,17 @@ before the SMACK rules were loaded; and it rotates its logs.
 ## Remote keys
 
 The window manager owns the Home key, so setting `home_appid` alone isn't enough.
-[`cc-keymon.awk`](../tv/opt-etc/cc-keymon.awk) reads the raw input device (`/dev/input/event6` on our TV):
+[`cc-keymon.awk`](../tv/opt-etc/cc-keymon.awk) reads the remote's raw input device. It finds the device
+by name ("Smart Control 2016") in `/proc/bus/input/devices` and never uses a fixed `eventN`. The kernel
+numbers input devices in the order they appear at boot, so the Bluetooth remote was `event6` on some
+boots and `event7` on others. With a fixed number, every key, Power included, was missed after an
+unlucky boot. If the device disappears, the daemon looks it up again.
 
 | Key (code) | Action |
 |---|---|
 | Home (63) | open the CC |
 | Back held, or EXIT (174) | back to the CC |
-| Power (116) | `org.tizen.system.deviced.power.PowerOff int32:1`: Samsung's instant-on standby (apps kept in RAM, off the network after ~18 s). Falls back to screen off if refused |
+| Power (116) | `org.tizen.system.deviced.power.PowerOff int32:1`: Samsung's instant-on standby (apps kept in RAM, off the network after ~18 s). Falls back to screen off if refused. A press while `memory/pm/state` is 3 or more (screen already off) is the wake press, so no standby is sent |
 | a vendor button (597) | open a chosen app (HBO Max here) |
 
 Holding Power for ~4 s reboots the TV natively. `touch /tmp/cc_keylog` makes the daemon log every key
