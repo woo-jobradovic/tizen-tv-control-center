@@ -18,15 +18,28 @@ BEGIN {
   # Log rotation for the CC daemon logs (not cc_orders.log): over 100 KB keep the last 50 KB.
   rot = "cd /opt/usr/apps/ClaudeTVCC0/data && for f in cc_launcher.log cc_keymon.log cc_backmon.log cc_homekey.log; do [ -f $f ] && [ $(wc -c < $f) -gt 102400 ] && tail -c 51200 $f > $f.tmp && mv $f.tmp $f; done"
   rc = 0
+  # v10: Samsung's app auto-update reinstalls a package and clears its "disabled" flag (12-Nov: 3 of
+  # the 41 were back, 2 of them running). Every ~10 min, disable again any app from the list that
+  # isn't disabled. First check 1 min after start. From a systemd unit pkgcmd needs --global
+  # (without it the call says "ok" and changes nothing); from the root shell it is the other way round.
+  db = "/opt/dbspace/.pkgmgr_parser.db"
+  guard = "sqlite3 " db " \"select app_id from package_app_info where app_disable<>'true'\" 2>/dev/null | grep -xFf /opt/etc/cc-disabled-apps.txt | while read a; do pkgcmd -D -t app -n $a --global >/dev/null 2>&1; sleep 1; echo \"re-disable $a: disabled=$(sqlite3 " db " \"select app_disable from package_app_info where app_id='$a'\") $(date)\" >> " l "; done"
+  dc = 1080
   oc = 119
   nc = 59
-  print "daemon v8+orders+appliances+newhome+bootcc+logrotate started " strftime() > l; close(l)
+  print "daemon v10+orders+appliances+newhome+bootcc+logrotate+launchcheck+debloatguard started " strftime() > l; close(l)
   while (1) {
     if ((getline line < w) > 0) {
       close(w)
       system("rm -f " w)
-      print "launching " line " " strftime() >> l; close(l)
-      system("app_launcher -s " line " >> " l " 2>&1 &")
+      # v10: the line is run by a root shell and any app can write this file, so only an app id
+      # plus plain app-control words (letters, digits, . _ = , : -; no leading dash) is accepted.
+      if (line ~ /^[A-Za-z0-9][A-Za-z0-9._-]*( [A-Za-z0-9][A-Za-z0-9._=,:-]*)*$/) {
+        print "launching " line " " strftime() >> l; close(l)
+        system("app_launcher -s " line " >> " l " 2>&1 &")
+      } else {
+        print "rejected launch request (" length(line) " chars) " strftime() >> l; close(l)
+      }
     } else {
       close(w)
     }
@@ -47,6 +60,10 @@ BEGIN {
     if (++rc >= 1200) {
       rc = 0
       system(rot)
+    }
+    if (++dc >= 1200) {
+      dc = 0
+      system(guard)
     }
     system("sleep 0.5")
   }

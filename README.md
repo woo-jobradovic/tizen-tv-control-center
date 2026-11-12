@@ -47,7 +47,7 @@ to undo everything.
 | | Before | After |
 |---|---|---|
 | Home screen | Samsung Home: ads, "recommended" rows, TV Plus | Control Center: clock, date, your apps, nothing else. Back on screen ~0.45 s after pressing Home |
-| Preinstalled bloat | can't be uninstalled, keeps running in the background | **41 apps disabled** in the package manager, **33 services blocked**, still the case after a reboot |
+| Preinstalled bloat | can't be uninstalled, keeps running in the background | **41 apps disabled** in the package manager, **33 services blocked**, still the case after a reboot. Apps that an app-store update switches back on are disabled again within ~10 min |
 | Crash loops | 55 background app launches every 40 s | **0** |
 | Tracking | ACR, telemetry, ad ID, voice backend | blocked on the TV *and* at the router |
 | Picture settings | Picture Clarity / Picture Mode greyed out once Samsung Home is gone | working ([the cause](docs/06-picture-clarity.md)) |
@@ -71,7 +71,7 @@ We don't claim the TV is "x times faster". We measured what we could measure, an
 9. [Recovery](docs/09-recovery.md): undo any part, or all of it
 10. [Compatibility](docs/10-compatibility.md): check your model before changing anything, and report results
 11. [No root](docs/11-no-root.md): what any Samsung TV owner can do, from 2016 models on, with our DNS blocklist
-11. [Timeline](docs/timeline.md): from the first DNS log to the finished setup
+12. [Timeline](docs/timeline.md): from the first DNS log to the finished setup
 
 ![Performance](screenshots/performance.png)
 
@@ -136,7 +136,8 @@ tv/control-center/   the home screen web app (index.html, config.xml, icons). Ad
                      (1920x1080) and, optionally, a noti.wav sound
 tv/opt-etc/          everything that runs on the TV from /opt/etc
   parseinfo.sh         boot script: blocks services, masks restart loops, registers and starts the CC
-  cc-launcher.awk      launches apps the CC asks for; keeps picture settings available; optional feeds
+  cc-launcher.awk      launches apps the CC asks for; keeps picture settings available and the
+                       disabled apps disabled; optional feeds
   cc-keymon.awk        remote keys: Home/Back -> CC, Power -> standby, extra button -> an app
   cc-backmon.awk       returns to the CC when you exit a streaming app
   cc-notifywake.awk    native pop-ups over any app

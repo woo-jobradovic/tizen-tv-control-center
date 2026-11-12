@@ -10,6 +10,7 @@ keeps relaunching it when it crashes. There are three tools, each for a differen
 ```sh
 pkgcmd -D -t app -n <appid>        # disable (no --global: with it the call fails, "Failed to get appinfo")
 pkgcmd -A -t app -n <appid>        # enable again
+# careful: in pkgcmd, -u means UNINSTALL (it is not a user ID). We lost one package to that typo.
 sqlite3 /opt/dbspace/.pkgmgr_parser.db "select app_id from package_app_info where app_disable='true'"
 ```
 
@@ -66,6 +67,22 @@ systemctl list-units --all --no-legend --plain | grep ' activating '
 ```
 
 Our 15 units are listed in `loop_units` in the boot script.
+
+## 4. App updates switch apps back on
+
+The disabled flag survives reboots, but not an update of the app. Samsung's app store updates system
+apps by itself, the package is installed again, and the flag is back to `false`. Two weeks after our
+debloat, 3 of the 41 apps were enabled again (`coba.adagent`, `mde-framework`, `easysetup-daemon`), and
+two of them were running. The installer keeps a history you can check:
+`/opt/var/log/appfw/app-installers/installation-history.log`.
+
+[`cc-launcher.awk`](../tv/opt-etc/cc-launcher.awk) now checks the list every ~10 min (first check 1 min
+after it starts) and disables again whatever isn't disabled. Test: we enabled one listed app, and 63 s
+after the daemon started it was disabled again.
+
+One trap: from a systemd unit, `pkgcmd -D` needs `--global`. Without it the call prints "ok" and changes
+nothing. From the root shell it is the other way round (see above). Always check the result in the
+database.
 
 ## Keep these
 

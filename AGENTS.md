@@ -22,6 +22,8 @@ from mistakes that cost hours on a real S90D (Tizen 9). Follow them before anyth
 * **Never disable** Settings (`org.tizen.menu`, `home.sidebar`, `coba.setting*`, `settings-datafw`),
   `avocd`, the web runtime (`wrt*`, webappservice, webserver), DRM (`dseal`, `Ddrm`), Bluetooth (the
   remote), casting, the screensavers (OLED burn-in protection), volume or input switching.
+* **Never add a `pkgcmd` flag you haven't looked up** (`pkgcmd --help`). `-u` is *uninstall*, not a user
+  ID: an agent's test command with `-u 5001` removed a package from our TV.
 * **Never use `com.samsung.tv.coba.plateauhome`** as a home app ID. It's an empty stub on Tizen 9.
 * **Never trust load average** on these TVs. Driver threads keep it near 14. Use `/proc/pressure/cpu`.
 
@@ -54,6 +56,10 @@ Then ask the owner to open Settings and play something in a streaming app.
 * After pushing a file for the web app: `chown 5001:5001` and `chsmack -a User::Pkg::<pkgid>`.
 * The root tool mangles backslashes and drops non-ASCII output. Send data base64-encoded, filter output
   with `tr -cd '[:print:]\n'`, and use `tr -d '[:space:]'`, never `tr -d '\n'`.
+* App-store updates clear the disabled flag of the apps they update. `cc-launcher.awk` disables them
+  again; if you don't run it, compare the database with your list after updates.
+* `pkgcmd -D -t app -n <appid>`: no `--global` from the root shell, `--global` from a systemd unit. The
+  wrong form prints "ok" and does nothing, so check `package_app_info.app_disable` afterwards.
 * `dlog` is off on retail firmware. Write your own logs under the app's `data/` directory.
 * Picture settings greyed out with a custom home screen: the AVOC `new_home` flag, see
   [docs/06-picture-clarity.md](docs/06-picture-clarity.md). Don't reach for a factory reset.
