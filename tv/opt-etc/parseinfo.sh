@@ -2,7 +2,7 @@
 BEGIN {
   log_file = "/opt/etc/overlay.log"
   "date" | getline now; close("date")
-  print now ": Clean overlay v4 starting" > log_file
+  print now ": Clean overlay v5 starting" > log_file
 
   # v3: Samsung AI picture services (aifw-*, aisctrlmgr_server, screen-analysis, contents-cognition,
   # aitech) are no longer blocked. contents-recognition-service (ACR) stays blocked.
@@ -105,16 +105,20 @@ BEGIN {
   system("vconftool set -t string db/appfw/home_appid ClaudeTVCC0.ControlCenter -f 2>/dev/null")
   print "  Control Center home_appid set" >> log_file
   # --- end Control Center ---
+  # v5: each CC daemon is started with Restart=always (RestartSec=2) so a crash is
+  # auto-recovered within a boot. Before this a daemon that died (e.g. cc-keymon =
+  # no Power/Home key) stayed dead until the next reboot. systemd's default
+  # StartLimitBurst still stops a genuinely broken daemon from thrashing forever.
   # CC launcher daemon (also resets the AVOC new_home flag so Picture Clarity stays available)
-  system("systemctl is-active cc-launcher.service >/dev/null 2>/dev/null || systemd-run --unit=cc-launcher /usr/bin/awk -f /opt/etc/cc-launcher.awk 2>/dev/null")
+  system("systemctl is-active cc-launcher.service >/dev/null 2>/dev/null || systemd-run --unit=cc-launcher --property=Restart=always --property=RestartSec=2 /usr/bin/awk -f /opt/etc/cc-launcher.awk 2>/dev/null")
   # Key monitor: Sweet TV -> HBO, Back hold / Home -> CC, Power -> screen toggle
   # (v4: replaces the dmesg-polling cc-homekey daemon)
-  system("systemctl is-active cc-keymon.service >/dev/null 2>/dev/null || systemd-run --unit=cc-keymon /usr/bin/awk -f /opt/etc/cc-keymon.awk 2>/dev/null")
+  system("systemctl is-active cc-keymon.service >/dev/null 2>/dev/null || systemd-run --unit=cc-keymon --property=Restart=always --property=RestartSec=2 /usr/bin/awk -f /opt/etc/cc-keymon.awk 2>/dev/null")
   # Back monitor: return to CC after user app exit, TV Plus -> HBO
-  system("systemctl is-active cc-backmon.service >/dev/null 2>/dev/null || systemd-run --unit=cc-backmon /usr/bin/awk -f /opt/etc/cc-backmon.awk 2>/dev/null")
+  system("systemctl is-active cc-backmon.service >/dev/null 2>/dev/null || systemd-run --unit=cc-backmon --property=Restart=always --property=RestartSec=2 /usr/bin/awk -f /opt/etc/cc-backmon.awk 2>/dev/null")
   # Notification wake: posts CC notifications as native Samsung banners while another app is on
   # screen (LC_ALL=C: the daemon builds byte-length-prefixed bundles)
-  system("systemctl is-active cc-notifywake.service >/dev/null 2>/dev/null || systemd-run --unit=cc-notifywake /usr/bin/env LC_ALL=C /usr/bin/awk -f /opt/etc/cc-notifywake.awk 2>/dev/null")
+  system("systemctl is-active cc-notifywake.service >/dev/null 2>/dev/null || systemd-run --unit=cc-notifywake --property=Restart=always --property=RestartSec=2 /usr/bin/env LC_ALL=C /usr/bin/awk -f /opt/etc/cc-notifywake.awk 2>/dev/null")
   print "  CC daemons started (launcher, keymon, backmon, notifywake)" >> log_file
   close(log_file)
 
